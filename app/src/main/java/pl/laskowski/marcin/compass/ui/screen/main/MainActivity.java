@@ -55,12 +55,16 @@ public class MainActivity
 
     @Override
     public void onRotationChanged(float rotation) {
-        float oldRotation = vArrow.getRotation();
-        float fixedRotation = AnimUtils.getImaginaryOldRotation(oldRotation, rotation);
-        if (oldRotation != fixedRotation) vArrow.setRotation(fixedRotation);
+        prepareArrowForRotation(rotation);
         vArrow.animate()
                 .setInterpolator(new DecelerateInterpolator())
                 .rotation(rotation);
+    }
+
+    private void prepareArrowForRotation(float rotation) {
+        float oldRotation = vArrow.getRotation();
+        float fixedRotation = AnimUtils.getImaginaryOldRotation(oldRotation, rotation);
+        if (oldRotation != fixedRotation) vArrow.setRotation(fixedRotation);
     }
 
 }

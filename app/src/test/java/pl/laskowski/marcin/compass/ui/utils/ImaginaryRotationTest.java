@@ -10,7 +10,7 @@ import static pl.laskowski.marcin.compass.ui.utils.AnimUtils.*;
  * Senfino 2017
  */
 
-public class AnimUtilsTest {
+public class ImaginaryRotationTest {
 
     @Test
     public void shouldReturnSameValueForSmallRotation() {

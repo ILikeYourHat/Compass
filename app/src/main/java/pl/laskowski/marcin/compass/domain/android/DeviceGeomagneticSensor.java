@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import pl.laskowski.marcin.compass.domain.AngleUtils;
 import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
 
 /**
@@ -99,7 +100,7 @@ public class DeviceGeomagneticSensor
         if (success) {
             float orientation[] = new float[3];
             SensorManager.getOrientation(R, orientation);
-            float azimuth = toNormalizedDegrees(orientation[0]);
+            float azimuth = AngleUtils.toNormalizedDegrees(orientation[0]);
             notifyNewValue(azimuth);
         }
     }
@@ -108,11 +109,6 @@ public class DeviceGeomagneticSensor
         for (Listener listener : listeners) {
             listener.onRotationChanged(degree);
         }
-    }
-
-    private float toNormalizedDegrees(float radians) {
-        float degrees = (float) Math.toDegrees(radians); // orientation
-        return (degrees + 360) % 360;
     }
 
 }
