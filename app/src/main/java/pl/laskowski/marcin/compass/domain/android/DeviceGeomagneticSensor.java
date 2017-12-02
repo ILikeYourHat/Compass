@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
 
@@ -19,14 +20,23 @@ import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
 public class DeviceGeomagneticSensor
         implements GeomagneticSensor, SensorEventListener {
 
+    private static final float MATRIX_CHANGE_RATIO = 0.7f;
+    private static final int RESULT_MATRIX_SIZE = 3;
+
     private final SensorManager sensorManager;
     private final Sensor magnetometer;
+    private final Sensor accelerometer;
+
+    private float[] accelerometerMatrix = new float[RESULT_MATRIX_SIZE];
+    private float[] magneticFieldMatrix = new float[RESULT_MATRIX_SIZE];
+
     private final List<Listener> listeners = new ArrayList<>();
 
     public DeviceGeomagneticSensor(Context context) {
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager == null) throw new RuntimeException("SensorManager unavailable in this device");
+        Objects.requireNonNull(sensorManager);
         this.magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        this.accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override
@@ -46,7 +56,8 @@ public class DeviceGeomagneticSensor
     }
 
     private void startUpdates() {
-        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void stopUpdates() {
@@ -55,15 +66,53 @@ public class DeviceGeomagneticSensor
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float degree = event.values[0];
-        for (Listener listener : listeners) {
-            listener.onRotationChanged(degree);
-        }
+        getDegreeFromEvent(event);
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // ignore
+    }
+
+    private synchronized void getDegreeFromEvent(SensorEvent event) {
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER:
+                updateMatrix(accelerometerMatrix, event.values);
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                updateMatrix(magneticFieldMatrix, event.values);
+                break;
+        }
+        updateRotation();
+    }
+
+    private void updateMatrix(float[] oldValues, float[] newValues) {
+        float oldValuesRatio = 1 - MATRIX_CHANGE_RATIO;
+        for (int i = 0; i < RESULT_MATRIX_SIZE; i++) {
+            oldValues[i] = oldValuesRatio * oldValues[i] + MATRIX_CHANGE_RATIO * newValues[i];
+        }
+    }
+
+    private void updateRotation() {
+        float R[] = new float[9];
+        boolean success = SensorManager.getRotationMatrix(R, null, accelerometerMatrix, magneticFieldMatrix);
+        if (success) {
+            float orientation[] = new float[3];
+            SensorManager.getOrientation(R, orientation);
+            float azimuth = toNormalizedDegrees(orientation[0]);
+            notifyNewValue(azimuth);
+        }
+    }
+
+    private void notifyNewValue(float degree) {
+        for (Listener listener : listeners) {
+            listener.onRotationChanged(degree);
+        }
+    }
+
+    private float toNormalizedDegrees(float radians) {
+        float degrees = (float) Math.toDegrees(radians); // orientation
+        return (degrees + 360) % 360;
     }
 
 }
