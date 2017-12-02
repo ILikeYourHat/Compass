@@ -2,6 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pl.laskowski.marcin.compass">
 
+    <uses-feature
+        android:name="android.hardware.sensor.compass"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
