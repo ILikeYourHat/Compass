@@ -2,20 +2,19 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_width="@dimen/compass_size"
+        android:layout_height="@dimen/compass_size"
         android:layout_gravity="center"
         android:background="@mipmap/windrose"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/activityMain_vNeedle"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_width="@dimen/compass_size"
+        android:layout_height="@dimen/compass_size"
         android:layout_gravity="center"
         android:src="@drawable/image_compass_pointer"
         tools:ignore="ContentDescription" />

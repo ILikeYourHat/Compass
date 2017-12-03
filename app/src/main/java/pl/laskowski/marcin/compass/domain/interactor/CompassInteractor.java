@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
 
@@ -18,6 +19,7 @@ public class CompassInteractor implements GeomagneticSensor.Listener {
     private final List<GeomagneticSensor.Listener> listeners = new ArrayList<>();
 
     @Inject
+    @Singleton
     public CompassInteractor(GeomagneticSensor sensor) {
         this.sensor = sensor;
         sensor.setListener(this);
