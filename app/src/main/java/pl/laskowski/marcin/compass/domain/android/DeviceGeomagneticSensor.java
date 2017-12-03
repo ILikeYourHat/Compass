@@ -8,8 +8,7 @@ import android.hardware.SensorManager;
 
 import java.util.Objects;
 
-import pl.laskowski.marcin.compass.domain.AngleUtils;
-import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
+import pl.laskowski.marcin.compass.domain.utils.AngleUtils;
 
 /**
  * Created by Marcin Laskowski.
@@ -85,8 +84,8 @@ public class DeviceGeomagneticSensor
         if (success) {
             float orientation[] = new float[3];
             SensorManager.getOrientation(R, orientation);
-            float azimuth = AngleUtils.toNormalizedDegrees(orientation[0]);
-            notifyNewValue(azimuth);
+            float degree = AngleUtils.toNormalizedDegrees(orientation[0]);
+            notifyNewValue(degree);
         }
     }
 

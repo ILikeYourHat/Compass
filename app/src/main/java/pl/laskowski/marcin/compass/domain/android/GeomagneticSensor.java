@@ -1,4 +1,4 @@
-package pl.laskowski.marcin.compass.domain;
+package pl.laskowski.marcin.compass.domain.android;
 
 /**
  * Created by Marcin Laskowski.

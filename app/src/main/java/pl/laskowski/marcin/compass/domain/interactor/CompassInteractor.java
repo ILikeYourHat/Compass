@@ -6,7 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
+import pl.laskowski.marcin.compass.domain.android.GeomagneticSensor;
 
 /**
  * Created by Marcin Laskowski.

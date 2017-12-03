@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
+import pl.laskowski.marcin.compass.domain.android.GeomagneticSensor;
 import pl.laskowski.marcin.compass.domain.android.DeviceGeomagneticSensor;
 
 /**

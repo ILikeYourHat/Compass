@@ -1,7 +1,7 @@
 package pl.laskowski.marcin.compass.ui.screen.main;
 
 import pl.laskowski.marcin.compass.dependency.AppComponent;
-import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
+import pl.laskowski.marcin.compass.domain.android.GeomagneticSensor;
 import pl.laskowski.marcin.compass.domain.interactor.CompassInteractor;
 import pl.laskowski.marcin.compass.ui.framework.BasePresenter;
 import pl.laskowski.marcin.compass.ui.utils.AnimUtils;

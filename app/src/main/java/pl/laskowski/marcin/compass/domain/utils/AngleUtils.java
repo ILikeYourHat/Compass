@@ -1,4 +1,4 @@
-package pl.laskowski.marcin.compass.domain;
+package pl.laskowski.marcin.compass.domain.utils;
 
 /**
  * Created by Marcin Laskowski.
@@ -6,6 +6,9 @@ package pl.laskowski.marcin.compass.domain;
  */
 
 public class AngleUtils {
+
+    private AngleUtils() {
+    }
 
     public static float toNormalizedDegrees(double radians) {
         float degrees = (float) Math.toDegrees(radians);
