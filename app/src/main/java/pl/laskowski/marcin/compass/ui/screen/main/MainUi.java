@@ -8,4 +8,11 @@ import pl.laskowski.marcin.compass.ui.framework.BaseUi;
  */
 
 public interface MainUi extends BaseUi {
+
+    void animateNeedleRotation(float degrees);
+
+    void setNeedleRotation(float degrees);
+
+    float getCurrentNeedleRotation();
+
 }

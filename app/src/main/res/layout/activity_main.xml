@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/activityMain_vArrow"
+        android:id="@+id/activityMain_vNeedle"
         android:layout_width="320dp"
         android:layout_height="320dp"
         android:layout_gravity="center"

@@ -6,9 +6,7 @@ import android.view.animation.DecelerateInterpolator;
 import butterknife.BindView;
 import pl.laskowski.marcin.compass.R;
 import pl.laskowski.marcin.compass.dependency.AppComponent;
-import pl.laskowski.marcin.compass.domain.GeomagneticSensor;
 import pl.laskowski.marcin.compass.ui.framework.BaseActivity;
-import pl.laskowski.marcin.compass.ui.utils.AnimUtils;
 
 /**
  * Created by Marcin Laskowski.
@@ -17,10 +15,10 @@ import pl.laskowski.marcin.compass.ui.utils.AnimUtils;
 
 public class MainActivity
         extends BaseActivity<MainPresenter>
-        implements MainUi, GeomagneticSensor.Listener {
+        implements MainUi {
 
-    @BindView(R.id.activityMain_vArrow)
-    View vArrow;
+    @BindView(R.id.activityMain_vNeedle)
+    View vNeedle;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -32,17 +30,20 @@ public class MainActivity
     }
 
     @Override
-    public void onRotationChanged(float rotation) {
-        prepareArrowForRotation(rotation);
-        vArrow.animate()
+    public void animateNeedleRotation(float degrees) {
+        vNeedle.animate()
                 .setInterpolator(new DecelerateInterpolator())
-                .rotation(rotation);
+                .rotation(degrees);
     }
 
-    private void prepareArrowForRotation(float rotation) {
-        float oldRotation = vArrow.getRotation();
-        float fixedRotation = AnimUtils.getImaginaryOldRotation(oldRotation, rotation);
-        if (oldRotation != fixedRotation) vArrow.setRotation(fixedRotation);
+    @Override
+    public void setNeedleRotation(float degrees) {
+        vNeedle.setRotation(degrees);
+    }
+
+    @Override
+    public float getCurrentNeedleRotation() {
+        return vNeedle.getRotation();
     }
 
 }

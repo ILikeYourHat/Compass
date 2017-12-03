@@ -13,7 +13,10 @@ public abstract class BasePresenter<Ui extends BaseUi> {
         this.ui = ui;
     }
 
+    protected void onStart() {
+    }
 
-
+    protected void onStop() {
+    }
 
 }
