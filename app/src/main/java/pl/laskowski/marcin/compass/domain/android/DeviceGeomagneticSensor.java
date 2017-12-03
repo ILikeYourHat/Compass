@@ -6,8 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import pl.laskowski.marcin.compass.domain.AngleUtils;
@@ -31,7 +29,7 @@ public class DeviceGeomagneticSensor
     private float[] accelerometerMatrix = new float[RESULT_MATRIX_SIZE];
     private float[] magneticFieldMatrix = new float[RESULT_MATRIX_SIZE];
 
-    private final List<Listener> listeners = new ArrayList<>();
+    private Listener listener;
 
     public DeviceGeomagneticSensor(Context context) {
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -41,41 +39,23 @@ public class DeviceGeomagneticSensor
     }
 
     @Override
-    public void addListener(Listener listener) {
-        synchronized (this) {
-            if (listeners.isEmpty()) startUpdates();
-            listeners.add(listener);
-        }
-    }
-
-    @Override
-    public void removeListener(Listener listener) {
-        synchronized (this) {
-            listeners.remove(listener);
-            if (listeners.isEmpty()) stopUpdates();
-        }
-    }
-
-    private void startUpdates() {
+    public void startUpdates() {
         sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
-    private void stopUpdates() {
+    @Override
+    public void stopUpdates() {
         sensorManager.unregisterListener(this);
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        getDegreeFromEvent(event);
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // ignore
-    }
-
-    private synchronized void getDegreeFromEvent(SensorEvent event) {
+    public synchronized void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
                 updateMatrix(accelerometerMatrix, event.values);
@@ -85,6 +65,11 @@ public class DeviceGeomagneticSensor
                 break;
         }
         updateRotation();
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // ignore
     }
 
     private void updateMatrix(float[] oldValues, float[] newValues) {
@@ -106,9 +91,7 @@ public class DeviceGeomagneticSensor
     }
 
     private void notifyNewValue(float degree) {
-        for (Listener listener : listeners) {
-            listener.onRotationChanged(degree);
-        }
+       if (listener != null) listener.onRotationChanged(degree);
     }
 
 }

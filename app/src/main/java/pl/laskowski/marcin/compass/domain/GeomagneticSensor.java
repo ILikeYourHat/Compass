@@ -7,9 +7,11 @@ package pl.laskowski.marcin.compass.domain;
 
 public interface GeomagneticSensor {
 
-    void addListener(Listener listener);
+    void startUpdates();
 
-    void removeListener(Listener listener);
+    void stopUpdates();
+
+    void setListener(Listener listener);
 
     interface Listener {
         void onRotationChanged(float degrees);

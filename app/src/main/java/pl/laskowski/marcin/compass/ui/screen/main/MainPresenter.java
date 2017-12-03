@@ -1,5 +1,7 @@
 package pl.laskowski.marcin.compass.ui.screen.main;
 
+import pl.laskowski.marcin.compass.dependency.AppComponent;
+import pl.laskowski.marcin.compass.domain.interactor.CompassInteractor;
 import pl.laskowski.marcin.compass.ui.framework.BasePresenter;
 
 /**
@@ -10,8 +12,11 @@ import pl.laskowski.marcin.compass.ui.framework.BasePresenter;
 public class MainPresenter
         extends BasePresenter<MainUi> {
 
-    public MainPresenter(MainUi ui) {
+    private final CompassInteractor interactor;
+
+    public MainPresenter(MainUi ui, AppComponent component) {
         super(ui);
+        this.interactor  = component.compassInteractor();
     }
 
 }
